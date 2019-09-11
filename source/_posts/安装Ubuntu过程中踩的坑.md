@@ -16,7 +16,7 @@ tags: [ubuntu, windows10, dual]
 
 2. `ctrl+x` 找到“磁盘管理“，选个剩余空间大的磁盘，右击选择”压缩卷“，分50G出来
 
-
+<!-- more -->
 
 ## ubuntu安装程序启动一会就黑屏关机
 

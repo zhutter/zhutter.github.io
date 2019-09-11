@@ -20,6 +20,8 @@ for(int i=1; i<nums.length; i++){
 return sum - min*n;
 ```
 
+<!-- more -->
+
 One good explanation in discuss area:
 
 > `sum + move*(n-1)  = x*n`

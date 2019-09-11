@@ -10,6 +10,8 @@ Given *n* points in the plane that are all pairwise distinct, a "boomerang" is a
 
 Find the number of boomerangs. You may assume that *n* will be at most **500** and coordinates of points are all in the range **[-10000, 10000]** (inclusive).
 
+<!-- more -->
+
 **Example:**
 
 ```

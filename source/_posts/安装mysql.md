@@ -10,6 +10,8 @@ tags: [mysql]
 
 2. 输入`mysqld -install`安装（一般需要创建一个data文件，可以提前创建，然后在ini文件中写入）也可以在提示错误的时候手动创建）
 
+   <!-- more -->
+
 3. `net start mysql`启动mysql服务器
 
 4. `mysql -h localhost -u root -p`或者`mysql -u root -p`登陆，登陆成功后，要更改密码才能进行其他操作，参考[登陆](https://dev.mysql.com/doc/refman/8.0/en/connecting-disconnecting.html)
