@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="为了避免每次push都输入密码，按照github的要求配置了ssh key后，明明 ssh -T git@github.com 都可以返回正确的结果，但是在push的时候还是要求输入用户名跟密码。 搜索了一番之后在StackOverflow看到了这个答案 SSH Key - Still asking for password and passphrase">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-13T08:15:05.939Z">
+<meta property="og:updated_time" content="2019-11-13T08:25:12.636Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="配置好ssh key后仍然要求输入密码">
 <meta name="twitter:description" content="为了避免每次push都输入密码，按照github的要求配置了ssh key后，明明 ssh -T git@github.com 都可以返回正确的结果，但是在push的时候还是要求输入用户名跟密码。 搜索了一番之后在StackOverflow看到了这个答案 SSH Key - Still asking for password and passphrase">
@@ -345,8 +345,11 @@
 </blockquote>
 <p>看了下个人项目下的<code>.git/config</code>里的配置，果然是使用<code>https</code>传输</p>
 <p>根据github的这个<a href="https://help.github.com/en/github/using-git/changing-a-remotes-url" target="_blank" rel="noopener">doc</a>，修改成<code>ssh</code>传输方式后尝试。</p>
-<p>还是不行，在<code>push</code>的时候依然显示<code>git-remote-https</code>，而不是走<code>ssh</code>，为什么呢？</p>
-<p>搜索了下，要在<code>_config.yml</code>里的deploy相应修改才可以，修改后再进行相应尝试。</p>
+<p>还是不行，在<code>push</code>的时候依然显示<code>git-remote-https</code>，而不是走<code>ssh</code>，为什么呢？想想应该是这个repo的原因，是不是在<code>hexo deploy</code>的时候执行了什么优先级更高的命令。</p>
+<p>搜索了下，要在<code>_config.yml</code>里的deploy相应修改才可以，并且如果在更换为<code>ssh</code>模式之前使用https进行过部署，则要先把<code>.deploy_git</code>文件夹删除掉</p>
+<p>运行<code>rm -rf .deploy_git</code>即可</p>
+<p>要多这一步的原因是，<code>hexo d</code> 这个命令是根据<code>_config.yml</code>文件里的配置来部署的。因而如果是正常的<code>repo</code>进行到前一步就够了，类似<code>hexo</code>的东西则需要在配置文件中再进行相应的修改。</p>
+<p>修改后就正常走<code>ssh</code>了，<code>push</code>时也不再需要输入账号密码</p>
 
       
     </div>
