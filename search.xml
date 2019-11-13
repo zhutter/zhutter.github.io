@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[配置好ssh key后仍然要求输入密码]]></title>
+    <url>%2F2019%2F11%2F13%2F%E9%85%8D%E7%BD%AE%E5%A5%BDssh-key%E5%90%8E%E4%BB%8D%E7%84%B6%E8%A6%81%E6%B1%82%E8%BE%93%E5%85%A5%E5%AF%86%E7%A0%81%2F</url>
+    <content type="text"><![CDATA[为了避免每次push都输入密码，按照github的要求配置了ssh key后，明明 ssh -T git@github.com 都可以返回正确的结果，但是在push的时候还是要求输入用户名跟密码。 搜索了一番之后在StackOverflow看到了这个答案 SSH Key - Still asking for password and passphrase If you work with HTTPs urls, it’ll always ask for your username / password. If you’re correctly using SSH when cloning / setting remotes. Then make sure you have a ssh-agent to remember your password. That way, you’ll only enter your passphrase once by terminal session. If it is still too annoying, then simply set a ssh-key without passphrase. 看了下个人项目下的.git/config里的配置，果然是使用https传输 根据github的这个doc，修改成ssh传输方式后尝试。 还是不行，在push的时候依然显示git-remote-https，而不是走ssh，为什么呢？ 搜索了下，要在_config.yml里的deploy相应修改才可以，修改后再进行相应尝试。]]></content>
+      <tags>
+        <tag>github</tag>
+        <tag>ssh</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[使用Code runner遇到的坑]]></title>
+    <url>%2F2019%2F10%2F30%2F%E4%BD%BF%E7%94%A8Code-runner%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91%2F</url>
+    <content type="text"><![CDATA[使用Code runner踩到的坑在mac上，code runner默认调用系统自带的python2.7，查了下，一种解决方案是要更改default settings里的exectorMap里的python命令，command+shift+p打开后，搜索code-runner，找到executorMap相关的设置，默认是&quot;python&quot;: python -u，显然不对劲，这个命令肯定是调用系统默认的python。 但是这个default settings是只读，没法更改。网上提供的方法是将setting里的code-runner.runInTerminal设置为true，但这个方法对我无效，勾选后依然是只读状态。查了半天，找到另一种方法是在settings.json里添加一行&quot;code-runner.executorMap&quot;: {&quot;python&quot;: &quot;python3 -u&quot;}, 这样就可以使用python3了。]]></content>
+      <tags>
+        <tag>vscode</tag>
+        <tag>code runner</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[ubuntu部署ss过程中遇到的坑]]></title>
+    <url>%2F2019%2F09%2F12%2Fubuntu%E9%83%A8%E7%BD%B2ss%E8%BF%87%E7%A8%8B%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91%2F</url>
+    <content type="text"><![CDATA[安装及配置sspip install shadowsocks 然后在顺手的位置创建一个配置文件，比如我放在/etc目录下，命名为shadowsock.json 编辑这个文件 123456789&#123; "server":"服务器 IP 或是域名", "server_port":端口号, "local_address": "127.0.0.1", "local_port":1080, "password":"密码", "timeout":300, "method":"加密方式"&#125; 保存后启动服务，这里会遇到第一个坑，就是sslocal这个程序安装后并没有添加到系统路径，会提示找到不到这个命令，可以用whereis sslocal 先找到这个在哪里，比如/home/harold/.local/bin/sslocal，再开启服务 sudo /home/harold/.local/bin/sslocal -c /etc/shadowsocks.json -d start 这种方式是设置后台运行，关闭命令行窗口也不会停止，停止把start换成stop即可，如果修改了配置，需要重启才会生效，同样的，关键字换成restart 保存为脚本自动运行可以把命令行写到一个.sh文件中，放在桌面 12#! /bin/bashsudo /home/harold/.local/bin/sslocal -c /etc/shadowsocks.json -d start Chrome安装SwitchOmega遇到的坑shadowsocks只是socks代理，转换成http，https代理在浏览器上需要配合SwitchOmega，火狐由于还没被墙，可以顺利安装并使用，但chrome被墙，就需要手动安装，新版chrome都不支持拖动crx文件安装扩展了，安装步骤如下 打开扩展中心，打开右上角的开发者模式 把下载好的crx文件改后缀名为.zip或者.rar，解压 点击扩展中心左上角的加载已解压的扩展程序，选择解压后的文件夹 如果提示安装失败，可以尝试将文件夹中_metadata修改为metadata PS: 网上提到的一个转换软件provixy折腾了半天发现对我无效，不知道什么原因。]]></content>
+      <tags>
+        <tag>ubuntu</tag>
+        <tag>linux</tag>
+        <tag>shadowsocks</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Regular expression简介]]></title>
+    <url>%2F2019%2F09%2F11%2FRegular-expression%E7%AE%80%E4%BB%8B%2F</url>
+    <content type="text"><![CDATA[Regular expression - 正则表达式简单匹配使用正则表达式，首先需要调用python的内置模块re, import re. 这样就可以调用re.search()进行查找。 re.match(pattern, string, flags=0) pattern: 匹配的正则表达式 string: 待匹配字符串 flags: 标志位，用于控制正则表达式的匹配方式，如：是否区分大小写，多行匹配等等。详情 re.I 使匹配对大小写不敏感 re.L 做本地化识别（locale-aware）匹配 re.M 多行匹配，影响 ^ 和 $ re.S 使 . 匹配包括换行在内的所有字符 re.U 根据Unicode字符集解析字符。这个标志影响 \w, \W, \b, \B. re.X 该标志通过给予你更灵活的格式以便你将正则表达式写得更易于理解。 如 12345678import re# regular expressionpattern1 = "cat"pattern2 = "bird"string = "dog runs to cat"print(re.search(pattern1, string)) # &lt;_sre.SRE_Match object; span=(12, 15), match='cat'&gt;print(re.search(pattern2, string)) # None 灵活匹配灵活匹配才是正则表达式的核心，使用特使的pattern来灵活匹配需要找的文字。 如果需要找到潜在的多个可能性文字, 我们可以使用 [] 将可能的字符囊括进来. 比如 [ab] 就说明我想要找的字符可以是 a 也可以是 b. 这里我们还需要注意的是, 建立一个正则的规则, 我们在 pattern 的 “” 前面需要加上一个 r 用来表示这是正则表达式, 而不是普通字符串. 通过下面这种形式, 如果字符串中出现 “run” 或者是 “ran”, 它都能找到. 1234# multiple patterns ("run" or "ran")ptn = r"r[au]n" # start with "r" means raw stringprint(re.search(ptn, "dog runs to cat")) # &lt;_sre.SRE_Match object; span=(4, 7), match='run'&gt; 按类型匹配除了自己定义规则, 还有很多匹配的规则时提前就给你定义好了的. 下面有一些特殊的匹配类型给大家先总结一下, 然后再上一些例子. \d : 任何数字 \D : 不是数字 \s : 任何 white space, 如 [\t\n\r\f\v] \S : 不是 white space \w : 任何大小写字母, 数字和 “” [a-zA-Z0-9] \W : 不是 \w \b : 空白字符 (只在某个字的开头或结尾) \B : 空白字符 (不在某个字的开头或结尾) \ : 匹配 \ . : 匹配任何字符 (除了 \n) ^ : 匹配开头 $ : 匹配结尾 ? : 前面的字符可有可无 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354# \d : decimal digitprint(re.search(r"r\dn", "run r4n")) # &lt;_sre.SRE_Match object; span=(4, 7), match='r4n'&gt;## \D : any non-decimal digitprint(re.search(r"r\Dn", "run r4n")) # &lt;_sre.SRE_Match object; span=(0, 3), match='run'&gt;## \s : any white space [\t\n\r\f\v]print(re.search(r"r\sn", "r\nn r4n")) # &lt;_sre.SRE_Match object; span=(0, 3), match='r\nn'&gt;## \S : opposite to \s, any non-white spaceprint(re.search(r"r\Sn", "r\nn r4n")) # &lt;_sre.SRE_Match object; span=(4, 7), match='r4n'&gt;## \w : [a-zA-Z0-9_]print(re.search(r"r\wn", "r\nn r4n")) # &lt;_sre.SRE_Match object; span=(4, 7), match='r4n'&gt;## \W : opposite to \wprint(re.search(r"r\Wn", "r\nn r4n")) # &lt;_sre.SRE_Match object; span=(0, 3), match='r\nn'&gt;## \b : empty string (only at the start or end of the word)print(re.search(r"\bruns\b", "dog runs to cat")) # &lt;_sre.SRE_Match object; span=(4, 8), match='runs'&gt;## \B : empty string (but not at the start or end of a word)print(re.search(r"\B runs \B", "dog runs to cat")) # &lt;_sre.SRE_Match object; span=(8, 14), match=' runs '&gt;## \\ : match \print(re.search(r"runs\\", "runs\ to me")) # &lt;_sre.SRE_Match object; span=(0, 5), match='runs\\'&gt;## . : match anything (except \n)print(re.search(r"r.n", "r[ns to me")) # &lt;_sre.SRE_Match object; span=(0, 3), match='r[n'&gt;## ^ : match line beginningprint(re.search(r"^dog", "dog runs to cat")) # &lt;_sre.SRE_Match object; span=(0, 3), match='dog'&gt;## $ : match line endingprint(re.search(r"cat$", "dog runs to cat")) # &lt;_sre.SRE_Match object; span=(12, 15), match='cat'&gt;## ? : may or may not occurprint(re.search(r"Mon(day)?", "Monday")) # &lt;_sre.SRE_Match object; span=(0, 6), match='Monday'&gt;#print(re.search(r"Mon(day)?", "Mon")) # &lt;_sre.SRE_Match object; span=(0, 3), match='Mon'&gt; 如果一个字符串有很多行, 我们想使用 ^ 形式来匹配行开头的字符, 如果用通常的形式是不成功的. 比如下面的 “I” 出现在第二行开头, 但是使用 r&quot;^I&quot; 却匹配不到第二行, 这时候, 我们要使用 另外一个参数, 让 re.search() 可以对每一行单独处理. 这个参数就是 flags=re.M, 或者这样写也行 flags=re.MULTILINE. 12345678string = """dog runs to cat.I run to dog."""print(re.search(r"^I", string)) # Noneprint(re.search(r"^I", string, flags=re.M)) # &lt;_sre.SRE_Match object; span=(18, 19), match='I'&gt; 复制到重复匹配了 r”(.+?)” . 表示任意字符 (有些情况下不包括换行), + 修饰前面一个字符, 限定数量是一个或者多个, 但默认会尽可能匹配更长的字符串 (贪婪匹配), + 后面再来个 ? 就表示用非贪婪匹配. 举个例子: 假设字符串 “abc*abc“, 如果有 ?, 那么匹配到的就是 abc, 如果没有, 匹配到的就是整个字符串, 因为 . 也可以匹配到 *. *? 重复任意次，但尽可能少重复+? 重复1次或更多次，但尽可能少重复?? 重复0次或1次，但尽可能少重复]]></content>
+      <tags>
+        <tag>regular expression</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[安装mysql]]></title>
+    <url>%2F2019%2F09%2F11%2F%E5%AE%89%E8%A3%85mysql%2F</url>
+    <content type="text"><![CDATA[Mysql Installation 下载zip，解压到某文件夹，用管理员权限进入命令行，进入mySql解压路径bin文件夹，如：D:\Program Files\mysql-8.0.13-winx64\bin 输入mysqld -install安装（一般需要创建一个data文件，可以提前创建，然后在ini文件中写入）也可以在提示错误的时候手动创建） net start mysql启动mysql服务器 mysql -h localhost -u root -p或者mysql -u root -p登陆，登陆成功后，要更改密码才能进行其他操作，参考登陆 -h: 指定客户端所要登录的Mysql，登陆本机(localhost or 127.0.0.1)该参数可忽略 -u: 登陆的用户名 -p: 告诉服务器将会使用一个密码来登陆，如果密码为空可忽略 密码: Speical4mysql ALTER USER ‘root&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;NewPassword&#39;; 创建用户与8.0前版本也有所不同， create user &#39;guest&#39;@&#39;localhost&#39; identified by &#39;guest123&#39; 同样的，授权命令也发生了变化 grant all on *.* to &#39;guest&#39;@&#39;localhost&#39; with grant option; 就算是root用户，默认也是没有grant权限的，要用grant grant option on *.* to &#39;root&#39;@&#39;localhost&#39;;来给root用户grant权限，之后即可正常操作。有关权限的操作，可以参考官方文档 彻底关闭mysql，mysqladmin -u root -p shutdown 关闭后不能直连，要打开net start mysql,打开后就可以重复上面的登陆步骤来操作。 在系统环境变量的Path（下方那个）中添加D:\Program Files\mysql-8.0.13-winx64\bin路径后，不用每次都cd到对应的bin文件夹，直接用mysql -u root -p即可。]]></content>
+      <tags>
+        <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[435. Minimum Moves to Equal Array Elements]]></title>
+    <url>%2F2019%2F09%2F11%2F435-Minimum-Moves-to-Equal-Array-Elements%2F</url>
+    <content type="text"><![CDATA[435. Minimum Moves to Equal Array ElementsSample code123456789int min = nums[0];int sum = nums[0];for(int i=1; i&lt;nums.length; i++)&#123; if(nums[i] &lt; min)&#123; min = nums[i]; &#125; sum += nums[i];&#125;return sum - min*n; One good explanation in discuss area: sum + move*(n-1) = x*n x = min + move x = min + move may be a liitle confusing, it comes from two observations: The minimum number will always be minium until it reaches the goal number, because other numbers(except the max) increased too. So if the final number is x, then x = min + move]]></content>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>easy</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[安装Ubuntu过程中踩的坑]]></title>
+    <url>%2F2019%2F09%2F11%2F%E5%AE%89%E8%A3%85Ubuntu%E8%BF%87%E7%A8%8B%E4%B8%AD%E8%B8%A9%E7%9A%84%E5%9D%91%2F</url>
+    <content type="text"><![CDATA[安装ubuntu过程中遇到的坑win10安装ubuntu需要做的预备工作 需要把“快速启动”，“安全启动”关闭 快速启动：ctrl+x 找到“电源选项” –&gt; ”选择电源按钮功能“ –&gt; 把“启用快速启动”勾掉 安全启动：进入bios把“secure boot”字样设置成disable ctrl+x 找到“磁盘管理“，选个剩余空间大的磁盘，右击选择”压缩卷“，分50G出来 ubuntu安装程序启动一会就黑屏关机在进入选择是试用还是安装的界面处，按e，然后在quite splash 代码后面添加nomodeset，即quite splash nomodeset，如果安装好后开机时出现类似的情况，做同样的处理 这样操作不能一劳永逸，安装好后，进入系统，打开终端 sudo vi /etc/default/grub 找到 GRUB_CMDLINE_LINUX_DEFAULT=“quiet splash”修改为：GRUB_CMDLINE_LINUX_DEFAULT=“quiet splash nomodeset” 然后更新grub sudo update-grub nvida显卡驱动安装没有网上说的那么麻烦，直接在“软件和更新”里找到对应的专用推荐驱动即可（显示tested字样） “Ubuntu 18.04.2 LTS Bionic Beaver - Release amd64 (20190210)” 的盘片插入驱动器“/cdrom/”再按「回车」键 cd /etc/apt sudo vi sources.list 注释掉deb cdrom开头的行 用UltraISO时遇到的坑一直提示u盘忙，怎么格式化，退软件，重启电脑都没用，后来用老毛桃还原了下u盘就可以了。。虽然不知道是什么原理，但是就是好了 还有个方法就是更改写入方式，改成可以写入的方式即可 安装后如何引导双系统如果电脑不是efi模式，那么下载easyBCD可以轻松搞掂，网上也可以搜索到大量的教程 如果电脑是efi模式，就进bios把ubuntu启动引导第一位，就可以选择grub2引导 ubuntu firefox字体模糊由于ubuntu firefox字体模糊，需要安装这两种字体，安装完成后，字体模糊的问题得到解决sudo apt-get install font-wqy-zenheisudo apt-get install font-wqy-microhei 设置完成后在firefox里面修改成对应的字体即可 没声音问题123sudo apt-get remove --purge alsa-base pulseaudiosudo apt-get install alsa-base pulseaudio pavucontrolsudo alsa force-reload]]></content>
+      <tags>
+        <tag>ubuntu</tag>
+        <tag>windows10</tag>
+        <tag>dual</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[447.Number of Boomerangs]]></title>
+    <url>%2F2019%2F08%2F09%2F447-Number-of-Boomerangs%2F</url>
+    <content type="text"><![CDATA[DescriptionGiven n points in the plane that are all pairwise distinct, a “boomerang” is a tuple of points (i, j, k) such that the distance between i and j equals the distance between iand k (the order of the tuple matters). Find the number of boomerangs. You may assume that n will be at most 500 and coordinates of points are all in the range [-10000, 10000] (inclusive). Example: 12345678Input:[[0,0],[1,0],[2,0]]Output:2Explanation:The two boomerangs are [[1,0],[0,0],[2,0]] and [[1,0],[2,0],[0,0]] Solution123456789101112131415161718192021222324public int numberOfBoomerangs(int[][] points) &#123; int res = 0; Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;(); for(int i=0; i&lt;points.length; i++)&#123; for(int j=0; j&lt;points.length; j++)&#123; int d = getDistance(points[i], points[j]); map.put(d, map.getOrDefault(d, 0)+1); &#125; for(int val : map.values())&#123; //after capturing the number of points equidistant from i //we need to calculate all possible permutaions //the number of permutation of size 2 from n is //nP2 = n!/(n-2)! = n*(n-1) res += val * (val-1); &#125; map.clear(); &#125; return res; &#125; private int getDistance(int[] point_a, int[] point_b)&#123; int x = point_a[0] - point_b[0]; int y = point_a[1] - point_b[1]; return x*x + y*y; &#125; This solution is provided by asurana28 in discussion area 12Time complexity: O(n^2)Space complexity: O(n)]]></content>
+      <tags>
+        <tag>easy</tag>
+        <tag>Leetcode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[hexo + next 的部署]]></title>
+    <url>%2F2019%2F08%2F08%2Fhexo-next%2F</url>
+    <content type="text"><![CDATA[Hexo博客框架+NexT主题1.安装Hexo在电脑上已经安装好Node.js(version &gt;= 6.9) 和 Git 后, 只需输入 npm install -g hexo-cli 即可快速安装 如果电脑中没有上述两个程序, 请依照官网文档指示安装 安装好后, 在想要的任意位置建立一个文件夹用来存放Hexo的源文件, 如个人新建了E:\hexo这个文件, 接着输入以下命令 123hexo init E:\hexocd E:\hexonpm install 其他未尽事宜参考官网, 可以使用 123hexo cleanhexo ghexo s 来预览 2.安装NexT打开Hexo的安装文件夹, 如 E:\hexo, 在Git bash中输入 git clone https://github.com/iissnan/hexo-theme-next themes/next 然后在_config.yml中, 找到theme 字段, 将其值更改为next theme: next 这样就安装完成了, 可以使用与上述预览相同代码来预览主题是否生效 未尽事宜, 参考NexT官网]]></content>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>NexT</tag>
+      </tags>
+  </entry>
+</search>
